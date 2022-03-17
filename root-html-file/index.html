@@ -1,10 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src *  data: blob: 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * data: blob: 'unsafe-inline'; font-src * data: blob: 'unsafe-inline';">
+<head>
+    <style>
+        .item1 {
+            grid-area: header;
+        }
+
+        .item2 {
+            grid-area: menu;
+        }
+
+        .item3 {
+            grid-area: app1;
+        }
+
+        .item4 {
+            grid-area: app2;
+        }
+
+        .item5 {
+            grid-area: footer;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-areas:
+    'header header header'
+    'menu app1 app2'
+    'footer footer footer';
+            gap: 10px;
+            background-color: #2196F3;
+            padding: 10px;
+        }
+
+        .grid-container > div {
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 20px 0;
+            font-size: 30px;
+        }
+    </style>
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src *  data: blob: 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * data: blob: 'unsafe-inline'; font-src * data: blob: 'unsafe-inline';">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Your application</title>
+    <title>Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="importmap-type" content="systemjs-importmap">
     <script type="systemjs-importmap">
@@ -17,8 +57,12 @@
           "single-spa-layout": "https://unpkg.com/single-spa-layout@1.0.0-beta.2/dist/system/single-spa-layout.min.js"
         }
       }
+
+
+
     </script>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/single-spa/5.5.0/system/single-spa.min.js" as="script" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/single-spa/5.5.0/system/single-spa.min.js"
+          as="script" crossorigin="anonymous"/>
     <script src='https://unpkg.com/core-js-bundle@3.1.4/minified.js'></script>
     <script src="https://unpkg.com/zone.js@0.10.3/dist/zone.js"></script>
     <script src="https://unpkg.com/import-map-overrides@1.15.1/dist/import-map-overrides.js"></script>
@@ -27,40 +71,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/4.0.0/extras/named-exports.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/4.0.0/extras/named-register.min.js"></script>
     <template id="single-spa-layout">
-      <single-spa-router>
-        <nav class="topnav">
-          <application name="navbar"></application>
-        </nav>
-        <div class="main-content">
-          <route path="app1">
-            <application name="app1"></application>
-          </route>
-          <route path="app2">
-            <application name="app2"></application>
-          </route>
-        </div>
-      </single-spa-router>
+        <single-spa-router>
+            <div class="grid-container">
+                <div class="item1">HEADER</div>
+                <div class="item2">MENU</div>
+                <div class="item3">
+                    <application name="app1"></application>
+                </div>
+                <div class="item4">
+                    <application name="app2"></application>
+                </div>
+                <div class="item5">FOOTER</div>
+            </div>
+        </single-spa-router>
     </template>
-  </head>
-  <body>
-    <script>
-      Promise.all([System.import('single-spa'), System.import('single-spa-layout')]).then(([singleSpa, singleSpaLayout]) => {
-        const { constructApplications, constructLayoutEngine, constructRoutes } = singleSpaLayout;
-        const { registerApplication, start } = singleSpa;
+</head>
+<body>
+<script>
+    Promise.all([System.import('single-spa'), System.import('single-spa-layout')]).then(([singleSpa, singleSpaLayout]) => {
+        const {constructApplications, constructLayoutEngine, constructRoutes} = singleSpaLayout;
+        const {registerApplication, start} = singleSpa;
 
         const routes = constructRoutes(document.querySelector('#single-spa-layout'));
         const applications = constructApplications({
-          routes,
-          loadApp({ name }) {
-            return System.import(name);
-          },
+            routes,
+            loadApp({name}) {
+                return System.import(name);
+            },
         });
-        const layoutEngine = constructLayoutEngine({ routes, applications });
+        const layoutEngine = constructLayoutEngine({routes, applications});
         applications.forEach(registerApplication);
 
         start();
-      });
-    </script>
-    <import-map-overrides-full></import-map-overrides-full>
-  </body>
+    });
+</script>
+<import-map-overrides-full></import-map-overrides-full>
+</body>
 </html>
